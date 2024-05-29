@@ -6,9 +6,11 @@ const TreeComponent = () => {
 //-------------------------Создание папок с правильным путём--------------------------------
 
   const addFolder = (parentId) => {
-    const childrenOfParent = tree.filter(folder => folder.id.startsWith(parentId + '.') && folder.id !== parentId);
+    console.log(parentId);
+    const childrenOfParent = tree.filter(folder => folder.id.startsWith(parentId + '.') && folder.id !== parentId && folder.id.split('.').length === parentId.split('.').length + 1);
     const lastChildIndex = childrenOfParent.length > 0 ? Math.max(...childrenOfParent.map(folder => parseInt(folder.id.split('.').pop(), 10))) : 0;
-    
+    console.log(childrenOfParent);
+    console.log(lastChildIndex);
     const newFolder = {
       id: parentId === 'root' ? `${parentId}.${lastChildIndex + 1}` : `${parentId}.${lastChildIndex + 1}`,
       name: parentId === 'root' ? `${parentId}.${lastChildIndex + 1}` : `${parentId}.${lastChildIndex + 1}`
