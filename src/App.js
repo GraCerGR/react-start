@@ -1,11 +1,11 @@
 
-import TreeView from './components/Tree';
+import TreeComponent from './components/Tree';
 
 function App() {
   return (
     <>      
-      <h1>CJCJCJCJ</h1>
-      <TreeView /> {/* Использование компонента TreeView */}
+      <h1>Tree</h1>
+      <TreeComponent /> 
     </>
   );
 }

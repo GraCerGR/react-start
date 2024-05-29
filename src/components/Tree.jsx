@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 
 const TreeComponent = () => {
-    const [tree, setTree] = useState([]);
+    const initialTreeState = [];
+    const initialRenamingFolderIdState = null;
+    const initialNewFolderNameState = '';
+
+    const [tree, setTree] = useState(initialTreeState); //  массив папок
+    const [renamingFolderId, setRenamingFolderId] = useState(initialRenamingFolderIdState); // для переименования
+    const [newFolderName, setNewFolderName] = useState(initialNewFolderNameState); // для переименования
 
     //-------------------------Создание папок с правильным путём--------------------------------
 
@@ -25,18 +31,55 @@ const TreeComponent = () => {
     };
 
     //----------------------Переименование папки-----------------------------------
+    const renameFolder = (folderId) => {
+        setRenamingFolderId(folderId);
+    };
 
+    const fildRename = () => {
+        const updatedTree = tree.map(folder => {
+            if (folder.id === renamingFolderId) {
+                return { ...folder, name: newFolderName };
+            }
+            return folder;
+        });
+        setTree(updatedTree);
+        setRenamingFolderId(null);
+        setNewFolderName('');
+    };
+
+
+    //----------------------Сброс до начального-----------------------------------
+    const resetState = () => {
+        setTree(initialTreeState);
+        setRenamingFolderId(initialRenamingFolderIdState);
+        setNewFolderName(initialNewFolderNameState);
+    };
 
     //---------------------------------------------------------
 
     return (
         <div>
-            <button onClick={() => addFolder('root')}>Добавить папку</button>
+            <button onClick={() => addFolder('root')}>Add a folder</button>
+            <button onClick={resetState}>Reset</button>
             {tree.map(folder => (
                 <div key={folder.id}>
-                    <span>{folder.name}</span>
-                    <button onClick={() => addFolder(folder.id)}>Добавить подпапку</button>
-                    <button onClick={() => deleteFolder(folder.id)}>Удалить папку</button>
+                    {renamingFolderId === folder.id ? (
+                        <div>
+                            <input
+                                type="text"
+                                value={newFolderName}
+                                onChange={(e) => setNewFolderName(e.target.value)}
+                            />
+                            <button onClick={fildRename}>Сохранить</button>
+                        </div>
+                    ) : (
+                        <div>
+                            <span>{folder.name}</span>
+                            <button onClick={() => addFolder(folder.id)}>Add a subfolder</button>
+                            <button onClick={() => deleteFolder(folder.id)}>Delete</button>
+                            <button onClick={() => renameFolder(folder.id)}>Rename</button>
+                        </div>
+                    )}
                     {folder.children && folder.children.map(child => (
                         <div key={child.id}>
                             <span>{child.name}</span>
